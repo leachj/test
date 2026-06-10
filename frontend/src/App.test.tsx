@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import App from '../App';
-import * as tasksApi from '../api/tasks';
+import App from './App';
+import * as tasksApi from './api/tasks';
 
-vi.mock('../api/tasks', () => ({
+vi.mock('./api/tasks', () => ({
   fetchTasks: vi.fn(),
   createTask: vi.fn(),
   updateTask: vi.fn(),
