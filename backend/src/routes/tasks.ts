@@ -41,7 +41,7 @@ router.post('/', (req: Request, res: Response, next: NextFunction) => {
   };
 
   tasks.set(task.id, task);
-  res.status(201).json(task);
+  res.status(200).json(task);
 });
 
 // PATCH /tasks/:id
