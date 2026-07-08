@@ -57,6 +57,13 @@ describe('Tasks API', () => {
       const res = await request(app).post('/api/tasks').send({ title: '   ' });
       expect(res.status).toBe(400);
     });
+
+    it('creates a task when title contains a mention and greeting', async () => {
+      const res = await request(app).post('/api/tasks').send({ title: '<@U0BFH6Q1G31> hi' });
+
+      expect(res.status).toBe(201);
+      expect(res.body.title).toBe('<@U0BFH6Q1G31> hi');
+    });
   });
 
   describe('GET /api/tasks/:id', () => {
