@@ -1,8 +1,15 @@
 # Task Manager
 
-A full-stack TypeScript application with a React frontend and an Express backend.
+A full-stack TypeScript task manager with a React frontend and an Express backend.
 
-## Project Structure
+## What it includes
+
+- Create, view, update, and delete tasks
+- Frontend UI built with React + Vite
+- Backend REST API built with Express
+- Separate CI workflows for frontend and backend
+
+## Project structure
 
 ```
 .
@@ -10,46 +17,81 @@ A full-stack TypeScript application with a React frontend and an Express backend
 ├── frontend/   # React + TypeScript + Vite UI
 └── .github/
     └── workflows/
-        ├── backend.yml   # CI: lint, build & test the backend
-        └── frontend.yml  # CI: lint, build & test the frontend
+        ├── backend.yml   # CI: lint, build, test
+        └── frontend.yml  # CI: lint, build, test
 ```
 
-## Getting Started
+## Prerequisites
 
-### Backend
+- Node.js 18+ (LTS recommended)
+- npm 9+
+
+## Quick start
+
+Install dependencies:
 
 ```bash
+cd backend && npm install
+cd ../frontend && npm install
+```
+
+Run the app in two terminals:
+
+```bash
+# Terminal 1: backend API
 cd backend
-npm install
-npm run dev        # Start dev server on http://localhost:3001
-npm run build      # Compile TypeScript → dist/
-npm test           # Run Jest tests
-npm run lint       # ESLint
+npm run dev
 ```
-
-### Frontend
 
 ```bash
+# Terminal 2: frontend
 cd frontend
-npm install
-npm run dev        # Start Vite dev server on http://localhost:3000
-npm run build      # Production build → dist/
-npm test           # Run Vitest tests
-npm run lint       # ESLint
+npm run dev
 ```
 
-> The frontend dev server proxies `/api` requests to the backend at `http://localhost:3001`.
+- Frontend: http://localhost:3000
+- Backend: http://localhost:3001
+- Frontend proxies `/api` requests to `http://localhost:3001`
 
-## API Endpoints
+## Package scripts
 
-| Method | Path              | Description        |
-|--------|-------------------|--------------------|
-| GET    | `/health`         | Health check       |
-| GET    | `/api/tasks`      | List all tasks     |
-| POST   | `/api/tasks`      | Create a task      |
-| GET    | `/api/tasks/:id`  | Get a single task  |
-| PATCH  | `/api/tasks/:id`  | Update a task      |
-| DELETE | `/api/tasks/:id`  | Delete a task      |
+### Backend (`/backend`)
+
+- `npm run dev` — start API in development mode
+- `npm run build` — compile TypeScript to `dist/`
+- `npm run start` — run compiled backend from `dist/`
+- `npm run test` — run Jest tests
+- `npm run lint` — run ESLint
+
+### Frontend (`/frontend`)
+
+- `npm run dev` — start Vite dev server
+- `npm run build` — create production bundle
+- `npm run preview` — preview production build locally
+- `npm run test` — run Vitest tests
+- `npm run lint` — run ESLint
+
+## API endpoints
+
+| Method | Path             | Description       |
+| ------ | ---------------- | ----------------- |
+| GET    | `/health`        | Health check      |
+| GET    | `/api/tasks`     | List all tasks    |
+| POST   | `/api/tasks`     | Create a task     |
+| GET    | `/api/tasks/:id` | Get a single task |
+| PATCH  | `/api/tasks/:id` | Update a task     |
+| DELETE | `/api/tasks/:id` | Delete a task     |
+
+Example `POST /api/tasks` body:
+
+```json
+{
+  "title": "Write better README",
+  "description": "Document setup and usage"
+}
+```
+
+> Task data is stored in memory and is reset when the backend process restarts.
 
 ## CI / GitHub Actions
 
