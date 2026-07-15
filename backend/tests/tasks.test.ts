@@ -48,6 +48,15 @@ describe('Tasks API', () => {
       expect(res.body.createdAt).toBeDefined();
     });
 
+    it('creates a task with an assignee', async () => {
+      const res = await request(app)
+        .post('/api/tasks')
+        .send({ title: 'Assigned Task', assignee: 'Maya Ellison' });
+
+      expect(res.status).toBe(201);
+      expect(res.body).toMatchObject({ title: 'Assigned Task', assignee: 'Maya Ellison' });
+    });
+
     it('returns 400 when title is missing', async () => {
       const res = await request(app).post('/api/tasks').send({ description: 'no title' });
       expect(res.status).toBe(400);
@@ -86,6 +95,18 @@ describe('Tasks API', () => {
 
       expect(res.status).toBe(200);
       expect(res.body).toMatchObject({ title: 'Updated', completed: true });
+    });
+
+    it('updates the assignee', async () => {
+      const create = await request(app).post('/api/tasks').send({ title: 'Original' });
+      const id = create.body.id as string;
+
+      const res = await request(app)
+        .patch(`/api/tasks/${id}`)
+        .send({ assignee: 'Darius Okonkwo' });
+
+      expect(res.status).toBe(200);
+      expect(res.body).toMatchObject({ assignee: 'Darius Okonkwo' });
     });
 
     it('returns 404 for unknown id', async () => {
