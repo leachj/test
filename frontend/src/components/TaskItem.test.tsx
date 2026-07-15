@@ -18,6 +18,22 @@ describe('TaskItem', () => {
     expect(screen.getByText('A description')).toBeInTheDocument();
   });
 
+  it('renders assignee when present', () => {
+    render(
+      <TaskItem
+        task={{ ...sampleTask, assignee: 'Priya Raman' }}
+        onToggle={vi.fn()}
+        onDelete={vi.fn()}
+      />
+    );
+    expect(screen.getByText(/Priya Raman/)).toBeInTheDocument();
+  });
+
+  it('does not render assignee text when absent', () => {
+    render(<TaskItem task={sampleTask} onToggle={vi.fn()} onDelete={vi.fn()} />);
+    expect(screen.queryByText(/Assigned to/)).not.toBeInTheDocument();
+  });
+
   it('renders checkbox unchecked for incomplete task', () => {
     render(<TaskItem task={sampleTask} onToggle={vi.fn()} onDelete={vi.fn()} />);
     const checkbox = screen.getByRole('checkbox');
