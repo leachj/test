@@ -32,7 +32,7 @@ describe('App', () => {
 
   it('renders tasks returned by the API', async () => {
     vi.mocked(tasksApi.fetchTasks).mockResolvedValue([
-      { id: '1', title: 'My Task', description: '', completed: false, createdAt: '' },
+      { id: '1', title: 'My Task', description: '', completed: false, assignee: null, createdAt: '' },
     ]);
 
     render(<App />);

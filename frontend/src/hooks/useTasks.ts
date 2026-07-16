@@ -8,6 +8,7 @@ export interface UseTasksReturn {
   addTask: (data: CreateTaskDto) => Promise<void>;
   toggleTask: (id: string, completed: boolean) => Promise<void>;
   removeTask: (id: string) => Promise<void>;
+  assignTask: (id: string, assignee: string | null) => Promise<void>;
 }
 
 export function useTasks(): UseTasksReturn {
@@ -47,5 +48,10 @@ export function useTasks(): UseTasksReturn {
     setTasks((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
-  return { tasks, loading, error, addTask, toggleTask, removeTask };
+  const assignTask = useCallback(async (id: string, assignee: string | null) => {
+    const updated = await updateTask(id, { assignee });
+    setTasks((prev) => prev.map((t) => (t.id === id ? updated : t)));
+  }, []);
+
+  return { tasks, loading, error, addTask, toggleTask, removeTask, assignTask };
 }

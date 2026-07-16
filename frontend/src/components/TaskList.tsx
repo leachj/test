@@ -3,7 +3,7 @@ import { TaskItem } from './TaskItem';
 import { TaskForm } from './TaskForm';
 
 export function TaskList() {
-  const { tasks, loading, error, addTask, toggleTask, removeTask } = useTasks();
+  const { tasks, loading, error, addTask, toggleTask, removeTask, assignTask } = useTasks();
 
   return (
     <div>
@@ -15,7 +15,7 @@ export function TaskList() {
       )}
       <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
         {tasks.map((task) => (
-          <TaskItem key={task.id} task={task} onToggle={toggleTask} onDelete={removeTask} />
+          <TaskItem key={task.id} task={task} onToggle={toggleTask} onDelete={removeTask} onAssign={assignTask} />
         ))}
       </ul>
     </div>

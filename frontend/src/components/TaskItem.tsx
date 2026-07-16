@@ -4,9 +4,10 @@ interface TaskItemProps {
   task: Task;
   onToggle: (id: string, completed: boolean) => void;
   onDelete: (id: string) => void;
+  onAssign?: (id: string, assignee: string | null) => void;
 }
 
-export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
+export function TaskItem({ task, onToggle, onDelete, onAssign }: TaskItemProps) {
   return (
     <li
       style={{
@@ -44,6 +45,30 @@ export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
             {task.description}
           </p>
         )}
+        <div style={{ marginTop: '0.35rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+          <label
+            htmlFor={`assignee-${task.id}`}
+            style={{ fontSize: '0.75rem', color: '#888', fontWeight: 600 }}
+          >
+            Assignee:
+          </label>
+          <input
+            id={`assignee-${task.id}`}
+            type="text"
+            defaultValue={task.assignee ?? ''}
+            aria-label={`Assignee for "${task.title}"`}
+            placeholder="Unassigned"
+            onBlur={(e) => onAssign?.(task.id, e.target.value.trim() || null)}
+            style={{
+              fontSize: '0.8rem',
+              padding: '0.15rem 0.35rem',
+              borderRadius: '4px',
+              border: '1px solid #ddd',
+              flex: 1,
+              minWidth: 0,
+            }}
+          />
+        </div>
       </div>
       <button
         onClick={() => onDelete(task.id)}
