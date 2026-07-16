@@ -8,6 +8,7 @@ const sampleTask: Task = {
   title: 'Test task',
   description: 'A description',
   completed: false,
+  assignee: null,
   createdAt: new Date().toISOString(),
 };
 
@@ -42,5 +43,42 @@ describe('TaskItem', () => {
     render(<TaskItem task={sampleTask} onToggle={vi.fn()} onDelete={onDelete} />);
     fireEvent.click(screen.getByLabelText(/delete/i));
     expect(onDelete).toHaveBeenCalledWith('1');
+  });
+
+  it('renders existing assignee in the assignee input', () => {
+    render(
+      <TaskItem task={{ ...sampleTask, assignee: 'octocat' }} onToggle={vi.fn()} onDelete={vi.fn()} />
+    );
+    expect(screen.getByLabelText(/assignee/i)).toHaveValue('octocat');
+  });
+
+  it('renders empty assignee input when unassigned', () => {
+    render(<TaskItem task={sampleTask} onToggle={vi.fn()} onDelete={vi.fn()} />);
+    expect(screen.getByLabelText(/assignee/i)).toHaveValue('');
+  });
+
+  it('calls onAssign with trimmed value when assignee input loses focus', () => {
+    const onAssign = vi.fn();
+    render(<TaskItem task={sampleTask} onToggle={vi.fn()} onDelete={vi.fn()} onAssign={onAssign} />);
+    const input = screen.getByLabelText(/assignee/i);
+    fireEvent.change(input, { target: { value: '  octocat  ' } });
+    fireEvent.blur(input);
+    expect(onAssign).toHaveBeenCalledWith('1', 'octocat');
+  });
+
+  it('calls onAssign with null when assignee input is cleared', () => {
+    const onAssign = vi.fn();
+    render(
+      <TaskItem
+        task={{ ...sampleTask, assignee: 'octocat' }}
+        onToggle={vi.fn()}
+        onDelete={vi.fn()}
+        onAssign={onAssign}
+      />
+    );
+    const input = screen.getByLabelText(/assignee/i);
+    fireEvent.change(input, { target: { value: '' } });
+    fireEvent.blur(input);
+    expect(onAssign).toHaveBeenCalledWith('1', null);
   });
 });
