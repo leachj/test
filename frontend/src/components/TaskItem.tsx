@@ -44,6 +44,11 @@ export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
             {task.description}
           </p>
         )}
+        {task.assignee && (
+          <p style={{ margin: '0.25rem 0 0', fontSize: '0.8rem', color: '#3182ce', wordBreak: 'break-word' }}>
+            Assigned to: {task.assignee}
+          </p>
+        )}
       </div>
       <button
         onClick={() => onDelete(task.id)}

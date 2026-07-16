@@ -43,4 +43,14 @@ describe('TaskItem', () => {
     fireEvent.click(screen.getByLabelText(/delete/i));
     expect(onDelete).toHaveBeenCalledWith('1');
   });
+
+  it('renders assignee when present', () => {
+    render(<TaskItem task={{ ...sampleTask, assignee: 'Alice' }} onToggle={vi.fn()} onDelete={vi.fn()} />);
+    expect(screen.getByText(/assigned to: alice/i)).toBeInTheDocument();
+  });
+
+  it('does not render assignee when absent', () => {
+    render(<TaskItem task={sampleTask} onToggle={vi.fn()} onDelete={vi.fn()} />);
+    expect(screen.queryByText(/assigned to/i)).not.toBeInTheDocument();
+  });
 });

@@ -8,6 +8,7 @@ interface TaskFormProps {
 export function TaskForm({ onSubmit }: TaskFormProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [assignee, setAssignee] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,9 +21,14 @@ export function TaskForm({ onSubmit }: TaskFormProps) {
     try {
       setSubmitting(true);
       setError(null);
-      await onSubmit({ title: title.trim(), description: description.trim() || undefined });
+      await onSubmit({
+        title: title.trim(),
+        description: description.trim() || undefined,
+        assignee: assignee.trim() || undefined,
+      });
       setTitle('');
       setDescription('');
+      setAssignee('');
     } catch {
       setError('Failed to add task');
     } finally {
@@ -55,6 +61,19 @@ export function TaskForm({ onSubmit }: TaskFormProps) {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Optional details..."
+          style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box' }}
+        />
+      </div>
+      <div style={{ marginBottom: '0.75rem' }}>
+        <label htmlFor="task-assignee" style={{ display: 'block', fontWeight: 600, marginBottom: '0.25rem' }}>
+          Assignee
+        </label>
+        <input
+          id="task-assignee"
+          type="text"
+          value={assignee}
+          onChange={(e) => setAssignee(e.target.value)}
+          placeholder="Who's responsible?"
           style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box' }}
         />
       </div>

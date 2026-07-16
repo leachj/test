@@ -57,6 +57,21 @@ describe('Tasks API', () => {
       const res = await request(app).post('/api/tasks').send({ title: '   ' });
       expect(res.status).toBe(400);
     });
+
+    it('creates a task with an assignee', async () => {
+      const res = await request(app)
+        .post('/api/tasks')
+        .send({ title: 'Assigned Task', assignee: 'Alice' });
+
+      expect(res.status).toBe(201);
+      expect(res.body).toMatchObject({ title: 'Assigned Task', assignee: 'Alice' });
+    });
+
+    it('omits assignee when not provided', async () => {
+      const res = await request(app).post('/api/tasks').send({ title: 'No assignee' });
+      expect(res.status).toBe(201);
+      expect(res.body.assignee).toBeUndefined();
+    });
   });
 
   describe('GET /api/tasks/:id', () => {
@@ -91,6 +106,18 @@ describe('Tasks API', () => {
     it('returns 404 for unknown id', async () => {
       const res = await request(app).patch('/api/tasks/nonexistent').send({ title: 'x' });
       expect(res.status).toBe(404);
+    });
+
+    it('updates the assignee', async () => {
+      const create = await request(app).post('/api/tasks').send({ title: 'Original' });
+      const id = create.body.id as string;
+
+      const res = await request(app)
+        .patch(`/api/tasks/${id}`)
+        .send({ assignee: 'Bob' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.assignee).toBe('Bob');
     });
   });
 
