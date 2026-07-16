@@ -37,6 +37,7 @@ router.post('/', (req: Request, res: Response, next: NextFunction) => {
     title: body.title.trim(),
     description: body.description?.trim() ?? '',
     completed: false,
+    assignee: body.assignee?.trim() || undefined,
     createdAt: new Date().toISOString(),
   };
 
@@ -59,6 +60,7 @@ router.patch('/:id', (req: Request, res: Response, next: NextFunction) => {
     title: body.title?.trim() ?? task.title,
     description: body.description?.trim() ?? task.description,
     completed: body.completed ?? task.completed,
+    assignee: body.assignee !== undefined ? body.assignee.trim() || undefined : task.assignee,
   };
 
   tasks.set(updated.id, updated);
