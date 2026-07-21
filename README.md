@@ -1,16 +1,16 @@
 # Task Manager
 
-A full-stack TypeScript application with a React frontend and an Express backend.
+A full-stack application with a React (TypeScript) frontend and a Rust (Axum) backend.
 
 ## Project Structure
 
 ```
 .
-├── backend/    # Node.js + Express + TypeScript REST API
+├── backend/    # Rust + Axum REST API
 ├── frontend/   # React + TypeScript + Vite UI
 └── .github/
     └── workflows/
-        ├── backend.yml   # CI: lint, build & test the backend
+        ├── backend.yml   # CI: fmt, clippy, build & test the backend
         └── frontend.yml  # CI: lint, build & test the frontend
 ```
 
@@ -20,11 +20,11 @@ A full-stack TypeScript application with a React frontend and an Express backend
 
 ```bash
 cd backend
-npm install
-npm run dev        # Start dev server on http://localhost:3001
-npm run build      # Compile TypeScript → dist/
-npm test           # Run Jest tests
-npm run lint       # ESLint
+cargo run           # Start dev server on http://localhost:3001
+cargo build --release  # Production build
+cargo test          # Run tests
+cargo clippy        # Lint
+cargo fmt           # Format
 ```
 
 ### Frontend
@@ -55,5 +55,5 @@ npm run lint       # ESLint
 
 Two workflows run on pushes and pull requests to `main`:
 
-- **Backend CI** (`.github/workflows/backend.yml`) — lint → build → test
+- **Backend CI** (`.github/workflows/backend.yml`) — fmt → clippy → build → test
 - **Frontend CI** (`.github/workflows/frontend.yml`) — lint → build → test
