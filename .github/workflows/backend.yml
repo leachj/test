@@ -25,24 +25,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          components: clippy, rustfmt
+      - name: Install CMake
+        uses: lukka/get-cmake@latest
 
-      - name: Cache cargo registry & build
-        uses: Swatinem/rust-cache@v2
-        with:
-          workspaces: backend
-
-      - name: Format check
-        run: cargo fmt -- --check
-
-      - name: Lint
-        run: cargo clippy --all-targets -- -D warnings
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
-        run: cargo build --verbose
+        run: cmake --build build --parallel
 
       - name: Test
-        run: cargo test --verbose
+        run: ctest --test-dir build --output-on-failure

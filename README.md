@@ -1,16 +1,16 @@
 # Task Manager
 
-A full-stack application with a React (TypeScript) frontend and a Rust (Axum) backend.
+A full-stack application with a React (TypeScript) frontend and a C++ (cpp-httplib) backend.
 
 ## Project Structure
 
 ```
 .
-├── backend/    # Rust + Axum REST API
+├── backend/    # C++ REST API (cpp-httplib + nlohmann/json, built with CMake)
 ├── frontend/   # React + TypeScript + Vite UI
 └── .github/
     └── workflows/
-        ├── backend.yml   # CI: fmt, clippy, build & test the backend
+        ├── backend.yml   # CI: configure, build & test the backend
         └── frontend.yml  # CI: lint, build & test the frontend
 ```
 
@@ -18,14 +18,17 @@ A full-stack application with a React (TypeScript) frontend and a Rust (Axum) ba
 
 ### Backend
 
+Requires CMake (>= 3.16) and a C++17 compiler.
+
 ```bash
 cd backend
-cargo run           # Start dev server on http://localhost:3001
-cargo build --release  # Production build
-cargo test          # Run tests
-cargo clippy        # Lint
-cargo fmt           # Format
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release  # Configure
+cmake --build build --parallel                  # Build (produces build/backend)
+./build/backend                                 # Start dev server on http://localhost:3001
+ctest --test-dir build --output-on-failure       # Run tests
 ```
+
+Set the `PORT` environment variable to override the default port 3001.
 
 ### Frontend
 
@@ -55,5 +58,5 @@ npm run lint       # ESLint
 
 Two workflows run on pushes and pull requests to `main`:
 
-- **Backend CI** (`.github/workflows/backend.yml`) — fmt → clippy → build → test
+- **Backend CI** (`.github/workflows/backend.yml`) — configure → build → test
 - **Frontend CI** (`.github/workflows/frontend.yml`) — lint → build → test
