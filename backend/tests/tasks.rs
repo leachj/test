@@ -256,3 +256,78 @@ async fn delete_task_returns_404_for_unknown_id() {
         .unwrap();
     assert_eq!(res.status(), StatusCode::NOT_FOUND);
 }
+
+#[tokio::test]
+async fn post_tasks_defaults_priority_to_medium() {
+    let app = app_with_fresh_state();
+    let res = app
+        .oneshot(json_request(
+            "POST",
+            "/api/tasks",
+            json!({ "title": "No priority given" }),
+        ))
+        .await
+        .unwrap();
+    assert_eq!(res.status(), StatusCode::CREATED);
+    let body = body_json(res).await;
+    assert_eq!(body["priority"], "medium");
+}
+
+#[tokio::test]
+async fn post_tasks_creates_a_task_with_given_priority() {
+    let app = app_with_fresh_state();
+    let res = app
+        .oneshot(json_request(
+            "POST",
+            "/api/tasks",
+            json!({ "title": "Urgent task", "priority": "high" }),
+        ))
+        .await
+        .unwrap();
+    assert_eq!(res.status(), StatusCode::CREATED);
+    let body = body_json(res).await;
+    assert_eq!(body["priority"], "high");
+}
+
+#[tokio::test]
+async fn post_tasks_returns_400_for_invalid_priority() {
+    let app = app_with_fresh_state();
+    let res = app
+        .oneshot(json_request(
+            "POST",
+            "/api/tasks",
+            json!({ "title": "Bad priority", "priority": "urgent" }),
+        ))
+        .await
+        .unwrap();
+    assert_eq!(res.status(), StatusCode::BAD_REQUEST);
+}
+
+#[tokio::test]
+async fn patch_task_updates_priority() {
+    let app = app_with_fresh_state();
+    let create = app
+        .clone()
+        .oneshot(json_request(
+            "POST",
+            "/api/tasks",
+            json!({ "title": "Original" }),
+        ))
+        .await
+        .unwrap();
+    let created = body_json(create).await;
+    let id = created["id"].as_str().unwrap();
+    assert_eq!(created["priority"], "medium");
+
+    let res = app
+        .oneshot(json_request(
+            "PATCH",
+            &format!("/api/tasks/{id}"),
+            json!({ "priority": "low" }),
+        ))
+        .await
+        .unwrap();
+    assert_eq!(res.status(), StatusCode::OK);
+    let body = body_json(res).await;
+    assert_eq!(body["priority"], "low");
+}

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CreateTaskDto } from '../api/tasks';
+import { CreateTaskDto, Priority } from '../api/tasks';
 
 interface TaskFormProps {
   onSubmit: (data: CreateTaskDto) => Promise<void>;
@@ -8,6 +8,7 @@ interface TaskFormProps {
 export function TaskForm({ onSubmit }: TaskFormProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [priority, setPriority] = useState<Priority>('medium');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,9 +21,10 @@ export function TaskForm({ onSubmit }: TaskFormProps) {
     try {
       setSubmitting(true);
       setError(null);
-      await onSubmit({ title: title.trim(), description: description.trim() || undefined });
+      await onSubmit({ title: title.trim(), description: description.trim() || undefined, priority });
       setTitle('');
       setDescription('');
+      setPriority('medium');
     } catch {
       setError('Failed to add task');
     } finally {
@@ -57,6 +59,21 @@ export function TaskForm({ onSubmit }: TaskFormProps) {
           placeholder="Optional details..."
           style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box' }}
         />
+      </div>
+      <div style={{ marginBottom: '0.75rem' }}>
+        <label htmlFor="task-priority" style={{ display: 'block', fontWeight: 600, marginBottom: '0.25rem' }}>
+          Priority
+        </label>
+        <select
+          id="task-priority"
+          value={priority}
+          onChange={(e) => setPriority(e.target.value as Priority)}
+          style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc', boxSizing: 'border-box' }}
+        >
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
       </div>
       {error && <p role="alert" style={{ color: '#e53e3e', margin: '0 0 0.5rem' }}>{error}</p>}
       <button
