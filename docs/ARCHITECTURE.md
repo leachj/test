@@ -26,6 +26,26 @@ single-page React frontend backed by a Rust/Axum REST API.
 - The two halves communicate exclusively over HTTP using JSON request/response
   bodies; there is no shared code or RPC layer between them.
 
+```mermaid
+flowchart LR
+    subgraph Frontend["Frontend (React + Vite, :3000)"]
+        UI["Components<br/>(TaskList, TaskItem, TaskForm)"]
+        Hook["useTasks hook"]
+        Api["api/tasks.ts (fetch client)"]
+        UI --> Hook --> Api
+    end
+
+    subgraph Backend["Backend (Rust + Axum, :3001)"]
+        Router["app.rs Router<br/>/health, /api/tasks"]
+        Handlers["routes.rs handlers"]
+        State["state.rs AppState<br/>(Mutex&lt;HashMap&gt;)"]
+        Router --> Handlers --> State
+    end
+
+    Api -- "HTTP JSON: GET/POST/PATCH/DELETE /api/tasks" --> Router
+    Router -- "JSON response" --> Api
+```
+
 ## Backend (`backend/`)
 
 Built with [Axum](https://github.com/tokio-rs/axum) on top of Tokio. Source is
@@ -87,6 +107,26 @@ that also routes `/api/*` to the backend (e.g. a reverse proxy), since the
 proxy config only applies to the dev server.
 
 ## Data flow example: creating a task
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant TaskForm
+    participant useTasks
+    participant ApiClient as api/tasks.ts
+    participant Axum as Axum routes.rs
+    participant State as AppState
+
+    User->>TaskForm: Fill in title/description, submit
+    TaskForm->>useTasks: addTask(data)
+    useTasks->>ApiClient: createTask(data)
+    ApiClient->>Axum: POST /api/tasks (JSON body)
+    Axum->>State: lock + insert new Task
+    State-->>Axum: Task stored
+    Axum-->>ApiClient: 201 Created (Task JSON)
+    ApiClient-->>useTasks: Task
+    useTasks-->>TaskForm: state updated, re-render
+```
 
 1. User submits `TaskForm` → `TaskList` calls `useTasks().addTask(data)`.
 2. `useTasks` calls `createTask` in `api/tasks.ts`, which does
