@@ -1,18 +1,18 @@
-# Task Manager
+# 📝 Task Manager
 
 A full-stack application with a React (TypeScript) frontend and a Rust (Axum) backend.
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-- **Backend:** Rust, [Axum](https://github.com/tokio-rs/axum), Tokio, Serde, UUID, Chrono, Tower-HTTP (CORS)
-- **Frontend:** React 18, TypeScript, Vite, Vitest, Testing Library, ESLint
+- 🦀 **Backend:** Rust, [Axum](https://github.com/tokio-rs/axum), Tokio, Serde, UUID, Chrono, Tower-HTTP (CORS)
+- ⚛️ **Frontend:** React 18, TypeScript, Vite, Vitest, Testing Library, ESLint
 
-## Prerequisites
+## ✅ Prerequisites
 
-- [Rust](https://www.rust-lang.org/tools/install) (stable toolchain, includes `cargo`)
-- [Node.js](https://nodejs.org/) 18+ and npm
+- 🦀 [Rust](https://www.rust-lang.org/tools/install) (stable toolchain, includes `cargo`)
+- 🟢 [Node.js](https://nodejs.org/) 18+ and npm
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 .
@@ -24,9 +24,9 @@ A full-stack application with a React (TypeScript) frontend and a Rust (Axum) ba
         └── frontend.yml  # CI: lint, build & test the frontend
 ```
 
-## Getting Started
+## 🚀 Getting Started
 
-### Backend
+### 🦀 Backend
 
 ```bash
 cd backend
@@ -37,7 +37,7 @@ cargo clippy        # Lint
 cargo fmt           # Format
 ```
 
-### Frontend
+### ⚛️ Frontend
 
 ```bash
 cd frontend
@@ -48,9 +48,9 @@ npm test           # Run Vitest tests
 npm run lint       # ESLint
 ```
 
-> The frontend dev server proxies `/api` requests to the backend at `http://localhost:3001`.
+> 💡 The frontend dev server proxies `/api` requests to the backend at `http://localhost:3001`.
 
-## API Endpoints
+## 🔌 API Endpoints
 
 | Method | Path              | Description        |
 |--------|-------------------|--------------------|
@@ -61,7 +61,7 @@ npm run lint       # ESLint
 | PATCH  | `/api/tasks/:id`  | Update a task      |
 | DELETE | `/api/tasks/:id`  | Delete a task      |
 
-## Data Model
+## 📦 Data Model
 
 A `Task` has the following shape (returned by the API as JSON):
 
@@ -73,13 +73,13 @@ A `Task` has the following shape (returned by the API as JSON):
 | `completed`   | `boolean` | Whether the task is done       |
 | `createdAt`   | `string`  | ISO 8601 creation timestamp    |
 
-## CI / GitHub Actions
+## ⚙️ CI / GitHub Actions
 
 Two workflows run on pushes and pull requests to `main`:
 
-- **Backend CI** (`.github/workflows/backend.yml`) — fmt → clippy → build → test
-- **Frontend CI** (`.github/workflows/frontend.yml`) — lint → build → test
+- ⚙️ **Backend CI** (`.github/workflows/backend.yml`) — fmt → clippy → build → test
+- ⚙️ **Frontend CI** (`.github/workflows/frontend.yml`) — lint → build → test
 
-## License
+## 📄 License
 
 This project is licensed under the terms of the [LICENSE](./LICENSE) file included in this repository.
