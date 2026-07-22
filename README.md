@@ -2,6 +2,16 @@
 
 A full-stack application with a React (TypeScript) frontend and a Rust (Axum) backend.
 
+## Tech Stack
+
+- **Backend:** Rust, [Axum](https://github.com/tokio-rs/axum), Tokio, Serde, UUID, Chrono, Tower-HTTP (CORS)
+- **Frontend:** React 18, TypeScript, Vite, Vitest, Testing Library, ESLint
+
+## Prerequisites
+
+- [Rust](https://www.rust-lang.org/tools/install) (stable toolchain, includes `cargo`)
+- [Node.js](https://nodejs.org/) 18+ and npm
+
 ## Project Structure
 
 ```
@@ -51,9 +61,25 @@ npm run lint       # ESLint
 | PATCH  | `/api/tasks/:id`  | Update a task      |
 | DELETE | `/api/tasks/:id`  | Delete a task      |
 
+## Data Model
+
+A `Task` has the following shape (returned by the API as JSON):
+
+| Field         | Type      | Description                    |
+|---------------|-----------|---------------------------------|
+| `id`          | `string`  | UUID assigned on creation      |
+| `title`       | `string`  | Task title                     |
+| `description` | `string`  | Task description               |
+| `completed`   | `boolean` | Whether the task is done       |
+| `createdAt`   | `string`  | ISO 8601 creation timestamp    |
+
 ## CI / GitHub Actions
 
 Two workflows run on pushes and pull requests to `main`:
 
 - **Backend CI** (`.github/workflows/backend.yml`) — fmt → clippy → build → test
 - **Frontend CI** (`.github/workflows/frontend.yml`) — lint → build → test
+
+## License
+
+This project is licensed under the terms of the [LICENSE](./LICENSE) file included in this repository.
