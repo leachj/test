@@ -53,6 +53,10 @@ async fn create_task(
             .map(|d| d.trim().to_string())
             .unwrap_or_default(),
         completed: false,
+        assignee: body
+            .assignee
+            .map(|a| a.trim().to_string())
+            .filter(|a| !a.is_empty()),
         created_at: Utc::now().to_rfc3339(),
     };
 
@@ -87,6 +91,11 @@ async fn update_task(
             .map(|d| d.trim().to_string())
             .unwrap_or(existing.description),
         completed: body.completed.unwrap_or(existing.completed),
+        assignee: body
+            .assignee
+            .map(|a| a.trim().to_string())
+            .filter(|a| !a.is_empty())
+            .or(existing.assignee),
         created_at: existing.created_at,
     };
 
