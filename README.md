@@ -14,6 +14,9 @@ A full-stack application with a React (TypeScript) frontend and a Rust (Axum) ba
         └── frontend.yml  # CI: lint, build & test the frontend
 ```
 
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for a deeper look at how the
+frontend and backend are structured and how they communicate.
+
 ## Getting Started
 
 ### Backend
