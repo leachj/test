@@ -6,6 +6,12 @@ interface TaskItemProps {
   onDelete: (id: string) => void;
 }
 
+const PRIORITY_COLORS: Record<Task['priority'], string> = {
+  low: '#38a169',
+  medium: '#dd6b20',
+  high: '#e53e3e',
+};
+
 export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
   return (
     <li
@@ -44,6 +50,21 @@ export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
             {task.description}
           </p>
         )}
+        <span
+          style={{
+            display: 'inline-block',
+            marginTop: '0.375rem',
+            padding: '0.125rem 0.5rem',
+            borderRadius: '999px',
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            textTransform: 'capitalize',
+            color: '#fff',
+            background: PRIORITY_COLORS[task.priority],
+          }}
+        >
+          {task.priority}
+        </span>
       </div>
       <button
         onClick={() => onDelete(task.id)}
