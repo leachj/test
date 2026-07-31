@@ -4,19 +4,19 @@ A full-stack task management application with a React (TypeScript) frontend and 
 
 ## ✨ Features
 
-- Create, list, view, update, and delete tasks
-- Mark tasks as complete/incomplete
-- In-memory data store on the backend (no external database required)
-- Type-safe REST API consumed by a React/TypeScript frontend
-- Automated CI for both backend (fmt, clippy, build, test) and frontend (lint, build, test)
+- 📝 Create, list, view, update, and delete tasks
+- ✅ Mark tasks as complete/incomplete
+- 💾 In-memory data store on the backend (no external database required)
+- 🔒 Type-safe REST API consumed by a React/TypeScript frontend
+- 🤖 Automated CI for both backend (fmt, clippy, build, test) and frontend (lint, build, test)
 
 ## 🧰 Prerequisites
 
 Make sure you have the following installed before getting started:
 
-- [Rust](https://www.rust-lang.org/tools/install) (stable toolchain, 1.75+ recommended) with `cargo`
-- [Node.js](https://nodejs.org/) 18+ and `npm`
-- Git
+- 🦀 [Rust](https://www.rust-lang.org/tools/install) (stable toolchain, 1.75+ recommended) with `cargo`
+- 🟢 [Node.js](https://nodejs.org/) 18+ and `npm`
+- 🔧 Git
 
 ## 🗂️ Project Structure
 
@@ -78,7 +78,7 @@ Once both servers are running, open [http://localhost:3000](http://localhost:300
 | PATCH  | `/api/tasks/:id`  | Update a task      |
 | DELETE | `/api/tasks/:id`  | Delete a task      |
 
-### Task shape
+### 🧾 Task shape
 
 Tasks returned by the API look like this:
 
@@ -103,12 +103,12 @@ Two workflows run on pushes and pull requests to `main`:
 
 ## 🤝 Contributing
 
-1. Create a feature branch off `main`
-2. Make your changes, keeping backend and frontend code idiomatic to their respective ecosystems
-3. Run the relevant checks locally before opening a PR:
+1. 🌿 Create a feature branch off `main`
+2. ✏️ Make your changes, keeping backend and frontend code idiomatic to their respective ecosystems
+3. 🧪 Run the relevant checks locally before opening a PR:
    - Backend: `cargo fmt`, `cargo clippy`, `cargo test`
    - Frontend: `npm run lint`, `npm test`
-4. Open a pull request — CI must pass before merging
+4. 🚢 Open a pull request — CI must pass before merging
 
 ## 📄 License
 
