@@ -2,6 +2,19 @@
 
 A full-stack application with a React (TypeScript) frontend and a Rust (Axum) backend.
 
+## ✨ Features
+
+- Create, view, update, and delete tasks via a REST API
+- React + TypeScript UI backed by Vite for fast dev builds
+- Rust (Axum) backend for a fast, memory-safe API layer
+- CORS-enabled API ready to be consumed by the bundled frontend or other clients
+- CI pipelines that lint, build, and test both the backend and frontend on every push/PR
+
+## 🧰 Prerequisites
+
+- [Rust](https://www.rust-lang.org/tools/install) (stable toolchain, includes `cargo`)
+- [Node.js](https://nodejs.org/) 18+ and `npm`
+
 ## 🗂️ Project Structure
 
 ```
@@ -50,6 +63,20 @@ npm run lint       # ESLint
 | GET    | `/api/tasks/:id`  | Get a single task  |
 | PATCH  | `/api/tasks/:id`  | Update a task      |
 | DELETE | `/api/tasks/:id`  | Delete a task      |
+
+### 📝 Task Model
+
+A task returned by the API has the following shape:
+
+```json
+{
+  "id": "uuid",
+  "title": "string",
+  "description": "string",
+  "completed": false,
+  "createdAt": "2024-01-01T00:00:00Z"
+}
+```
 
 ## ⚙️ CI / GitHub Actions
 
