@@ -9,10 +9,11 @@ describe('TaskForm', () => {
     mockSubmit.mockReset();
   });
 
-  it('renders title and description inputs', () => {
+  it('renders title, description, and due date inputs', () => {
     render(<TaskForm onSubmit={mockSubmit} />);
     expect(screen.getByLabelText(/title/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/description/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/due date/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /add task/i })).toBeInTheDocument();
   });
 
@@ -37,6 +38,26 @@ describe('TaskForm', () => {
 
     expect(screen.getByLabelText(/title/i)).toHaveValue('');
     expect(screen.getByLabelText(/description/i)).toHaveValue('');
+  });
+
+  it('calls onSubmit with title, description, and due date', async () => {
+    mockSubmit.mockResolvedValue(undefined);
+    render(<TaskForm onSubmit={mockSubmit} />);
+
+    fireEvent.change(screen.getByLabelText(/title/i), { target: { value: 'Buy milk' } });
+    fireEvent.change(screen.getByLabelText(/due date/i), { target: { value: '2030-01-15' } });
+    fireEvent.click(screen.getByRole('button', { name: /add task/i }));
+
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          title: 'Buy milk',
+          dueDate: new Date('2030-01-15').toISOString(),
+        }),
+      );
+    });
+
+    expect(screen.getByLabelText(/due date/i)).toHaveValue('');
   });
 
   it('shows error message when onSubmit throws', async () => {
