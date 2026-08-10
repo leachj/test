@@ -43,4 +43,28 @@ describe('TaskItem', () => {
     fireEvent.click(screen.getByLabelText(/delete/i));
     expect(onDelete).toHaveBeenCalledWith('1');
   });
+
+  it('renders due date when present', () => {
+    const task = { ...sampleTask, dueDate: '2030-01-15T00:00:00Z' };
+    render(<TaskItem task={task} onToggle={vi.fn()} onDelete={vi.fn()} />);
+    expect(screen.getByText(/due:/i)).toBeInTheDocument();
+  });
+
+  it('shows overdue styling for a past due date on an incomplete task', () => {
+    const task = { ...sampleTask, dueDate: '2020-01-01T00:00:00Z' };
+    render(<TaskItem task={task} onToggle={vi.fn()} onDelete={vi.fn()} />);
+    expect(screen.getByText(/overdue/i)).toBeInTheDocument();
+  });
+
+  it('does not show overdue styling for a past due date on a completed task', () => {
+    const task = { ...sampleTask, completed: true, dueDate: '2020-01-01T00:00:00Z' };
+    render(<TaskItem task={task} onToggle={vi.fn()} onDelete={vi.fn()} />);
+    expect(screen.queryByText(/overdue/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/due:/i)).toBeInTheDocument();
+  });
+
+  it('does not render a due date section when absent', () => {
+    render(<TaskItem task={sampleTask} onToggle={vi.fn()} onDelete={vi.fn()} />);
+    expect(screen.queryByText(/due:/i)).not.toBeInTheDocument();
+  });
 });

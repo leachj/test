@@ -242,6 +242,138 @@ async fn delete_task_deletes_a_task() {
 }
 
 #[tokio::test]
+async fn post_tasks_creates_a_task_with_due_date() {
+    let app = app_with_fresh_state();
+    let res = app
+        .oneshot(json_request(
+            "POST",
+            "/api/tasks",
+            json!({ "title": "With due date", "dueDate": "2030-01-15T00:00:00Z" }),
+        ))
+        .await
+        .unwrap();
+
+    assert_eq!(res.status(), StatusCode::CREATED);
+    let body = body_json(res).await;
+    assert_eq!(body["dueDate"], "2030-01-15T00:00:00+00:00");
+}
+
+#[tokio::test]
+async fn post_tasks_creates_a_task_without_due_date() {
+    let app = app_with_fresh_state();
+    let res = app
+        .oneshot(json_request(
+            "POST",
+            "/api/tasks",
+            json!({ "title": "No due date" }),
+        ))
+        .await
+        .unwrap();
+
+    assert_eq!(res.status(), StatusCode::CREATED);
+    let body = body_json(res).await;
+    assert!(body.get("dueDate").is_none() || body["dueDate"].is_null());
+}
+
+#[tokio::test]
+async fn post_tasks_returns_400_when_due_date_is_invalid() {
+    let app = app_with_fresh_state();
+    let res = app
+        .oneshot(json_request(
+            "POST",
+            "/api/tasks",
+            json!({ "title": "Bad due date", "dueDate": "not-a-date" }),
+        ))
+        .await
+        .unwrap();
+    assert_eq!(res.status(), StatusCode::BAD_REQUEST);
+}
+
+#[tokio::test]
+async fn patch_task_updates_due_date() {
+    let app = app_with_fresh_state();
+    let create = app
+        .clone()
+        .oneshot(json_request(
+            "POST",
+            "/api/tasks",
+            json!({ "title": "Original" }),
+        ))
+        .await
+        .unwrap();
+    let created = body_json(create).await;
+    let id = created["id"].as_str().unwrap();
+
+    let res = app
+        .oneshot(json_request(
+            "PATCH",
+            &format!("/api/tasks/{id}"),
+            json!({ "dueDate": "2030-06-01T12:00:00Z" }),
+        ))
+        .await
+        .unwrap();
+    assert_eq!(res.status(), StatusCode::OK);
+    let body = body_json(res).await;
+    assert_eq!(body["dueDate"], "2030-06-01T12:00:00+00:00");
+}
+
+#[tokio::test]
+async fn patch_task_clears_due_date_when_set_to_null() {
+    let app = app_with_fresh_state();
+    let create = app
+        .clone()
+        .oneshot(json_request(
+            "POST",
+            "/api/tasks",
+            json!({ "title": "Original", "dueDate": "2030-01-01T00:00:00Z" }),
+        ))
+        .await
+        .unwrap();
+    let created = body_json(create).await;
+    let id = created["id"].as_str().unwrap();
+
+    let res = app
+        .oneshot(json_request(
+            "PATCH",
+            &format!("/api/tasks/{id}"),
+            json!({ "dueDate": null }),
+        ))
+        .await
+        .unwrap();
+    assert_eq!(res.status(), StatusCode::OK);
+    let body = body_json(res).await;
+    assert!(body.get("dueDate").is_none() || body["dueDate"].is_null());
+}
+
+#[tokio::test]
+async fn patch_task_leaves_due_date_unchanged_when_omitted() {
+    let app = app_with_fresh_state();
+    let create = app
+        .clone()
+        .oneshot(json_request(
+            "POST",
+            "/api/tasks",
+            json!({ "title": "Original", "dueDate": "2030-01-01T00:00:00Z" }),
+        ))
+        .await
+        .unwrap();
+    let created = body_json(create).await;
+    let id = created["id"].as_str().unwrap();
+
+    let res = app
+        .oneshot(json_request(
+            "PATCH",
+            &format!("/api/tasks/{id}"),
+            json!({ "title": "Updated" }),
+        ))
+        .await
+        .unwrap();
+    assert_eq!(res.status(), StatusCode::OK);
+    let body = body_json(res).await;
+    assert_eq!(body["dueDate"], "2030-01-01T00:00:00+00:00");
+}
+
+#[tokio::test]
 async fn delete_task_returns_404_for_unknown_id() {
     let app = app_with_fresh_state();
     let res = app

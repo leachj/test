@@ -7,6 +7,8 @@ interface TaskItemProps {
 }
 
 export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
+  const isOverdue = Boolean(task.dueDate) && !task.completed && new Date(task.dueDate as string) < new Date();
+
   return (
     <li
       style={{
@@ -42,6 +44,19 @@ export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
         {task.description && (
           <p style={{ margin: '0.25rem 0 0', fontSize: '0.875rem', color: '#555', wordBreak: 'break-word' }}>
             {task.description}
+          </p>
+        )}
+        {task.dueDate && (
+          <p
+            style={{
+              margin: '0.25rem 0 0',
+              fontSize: '0.8rem',
+              fontWeight: isOverdue ? 600 : 400,
+              color: isOverdue ? '#e53e3e' : '#888',
+            }}
+          >
+            {isOverdue ? '⚠ Overdue: ' : 'Due: '}
+            {new Date(task.dueDate).toLocaleDateString()}
           </p>
         )}
       </div>
