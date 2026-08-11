@@ -14,38 +14,38 @@ A full-stack application with a React (TypeScript) frontend and a Rust (Axum) ba
         └── frontend.yml  # CI: lint, build & test the frontend
 ```
 
-## 🏗️ Architecture
+## ✨🏗️✨ Architecture
 
 ```mermaid
 flowchart LR
-    subgraph Client
-        UI["⚛️ React + TypeScript UI\n(Vite dev server :3000)"]
+    subgraph Client["✨ Client ✨"]
+        UI["⚛️✨ React + TypeScript UI\n(Vite dev server :3000)"]
     end
 
-    subgraph Server["🦀 Rust Backend"]
-        API["🦀 Axum REST API\n(:3001)"]
-        DB[("🗄️ Data Store")]
+    subgraph Server["✨🦀 Rust Backend ✨"]
+        API["🦀✨ Axum REST API\n(:3001)"]
+        DB[("🗄️✨ Data Store")]
         API --> DB
     end
 
-    UI -- "HTTP /api (proxied)" --> API
+    UI -- "✨ HTTP /api (proxied) ✨" --> API
 ```
 
-## 🔄 Request Flow
+## ✨🔄✨ Request Flow
 
 ```mermaid
 sequenceDiagram
     actor User
-    participant UI as ⚛️ React UI
-    participant API as 🦀 Axum API
-    participant DB as 🗄️ Data Store
+    participant UI as ⚛️✨ React UI
+    participant API as 🦀✨ Axum API
+    participant DB as 🗄️✨ Data Store
 
-    User->>UI: 🖱️ Interact (create/update/delete task)
-    UI->>API: 📡 HTTP request (/api/tasks...)
-    API->>DB: 🔍 Query / mutate
-    DB-->>API: ✅ Result
-    API-->>UI: 📦 JSON response
-    UI-->>User: 🔄 Updated task list
+    User->>UI: 🖱️✨ Interact (create/update/delete task)
+    UI->>API: 📡✨ HTTP request (/api/tasks...)
+    API->>DB: 🔍✨ Query / mutate
+    DB-->>API: ✅✨ Result
+    API-->>UI: 📦✨ JSON response
+    UI-->>User: 🔄✨ Updated task list
 ```
 
 ## 🚀 Getting Started
