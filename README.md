@@ -22,9 +22,9 @@ flowchart LR
         UI["⚛️ React + TypeScript UI\n(Vite dev server :3000)"]
     end
 
-    subgraph Server["Rust Backend"]
+    subgraph Server["🦀 Rust Backend"]
         API["🦀 Axum REST API\n(:3001)"]
-        DB[("Data Store")]
+        DB[("🗄️ Data Store")]
         API --> DB
     end
 
@@ -36,16 +36,16 @@ flowchart LR
 ```mermaid
 sequenceDiagram
     actor User
-    participant UI as React UI
-    participant API as Axum API
-    participant DB as Data Store
+    participant UI as ⚛️ React UI
+    participant API as 🦀 Axum API
+    participant DB as 🗄️ Data Store
 
-    User->>UI: Interact (create/update/delete task)
-    UI->>API: HTTP request (/api/tasks...)
-    API->>DB: Query / mutate
-    DB-->>API: Result
-    API-->>UI: JSON response
-    UI-->>User: Updated task list
+    User->>UI: 🖱️ Interact (create/update/delete task)
+    UI->>API: 📡 HTTP request (/api/tasks...)
+    API->>DB: 🔍 Query / mutate
+    DB-->>API: ✅ Result
+    API-->>UI: 📦 JSON response
+    UI-->>User: 🔄 Updated task list
 ```
 
 ## 🚀 Getting Started
