@@ -54,6 +54,8 @@ sequenceDiagram
 
 ## 🚀 Getting Started
 
+> 📖 For a full local development walkthrough, see [DEVELOPMENT.md](DEVELOPMENT.md).
+
 ### 🦀 Backend
 
 ```bash
