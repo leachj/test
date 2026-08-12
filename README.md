@@ -1,6 +1,6 @@
 # 📋 Task Manager
 
-A full-stack application with a React (TypeScript) frontend and a Rust (Axum) backend.
+✨ A full-stack application with a ⚛️ React (TypeScript) frontend and a 🦀 Rust (Axum) backend.
 
 ## 🗂️ Project Structure
 
@@ -14,7 +14,47 @@ A full-stack application with a React (TypeScript) frontend and a Rust (Axum) ba
         └── frontend.yml  # CI: lint, build & test the frontend
 ```
 
+## 🏗️ Architecture
+
+```mermaid
+graph TD
+    User(["👤 User"]) -->|HTTP| Frontend["⚛️ Frontend<br/>React + TypeScript + Vite<br/>localhost:3000"]
+    Frontend -->|"/api/* (proxied)"| Backend["🦀 Backend<br/>Rust + Axum REST API<br/>localhost:3001"]
+    Backend --> Store[("🗄️ Task Store")]
+
+    subgraph CI["⚙️ GitHub Actions CI"]
+        BackendCI["backend.yml<br/>fmt → clippy → build → test"]
+        FrontendCI["frontend.yml<br/>lint → build → test"]
+    end
+```
+
+## 🔄 API Request Flow
+
+```mermaid
+sequenceDiagram
+    participant U as 👤 User
+    participant F as ⚛️ Frontend
+    participant B as 🦀 Backend
+    participant D as 🗄️ Task Store
+
+    U->>F: Interact with UI
+    F->>B: GET /api/tasks
+    B->>D: Fetch tasks
+    D-->>B: Task list
+    B-->>F: 200 OK (JSON)
+    F-->>U: Render tasks
+
+    U->>F: Create task
+    F->>B: POST /api/tasks
+    B->>D: Insert task
+    D-->>B: Created task
+    B-->>F: 201 Created
+    F-->>U: Show new task
+```
+
 ## 🚀 Getting Started
+
+> 📖 For a full local development walkthrough, see [DEVELOPMENT.md](DEVELOPMENT.md).
 
 ### 🦀 Backend
 
@@ -38,18 +78,18 @@ npm test           # Run Vitest tests
 npm run lint       # ESLint
 ```
 
-> The frontend dev server proxies `/api` requests to the backend at `http://localhost:3001`.
+> 💡 The frontend dev server proxies `/api` requests to the backend at `http://localhost:3001`.
 
 ## 🔌 API Endpoints
 
 | Method | Path              | Description        |
 |--------|-------------------|--------------------|
-| GET    | `/health`         | Health check       |
-| GET    | `/api/tasks`      | List all tasks     |
-| POST   | `/api/tasks`      | Create a task      |
-| GET    | `/api/tasks/:id`  | Get a single task  |
-| PATCH  | `/api/tasks/:id`  | Update a task      |
-| DELETE | `/api/tasks/:id`  | Delete a task      |
+| GET    | `/health`         | 💓 Health check       |
+| GET    | `/api/tasks`      | 📋 List all tasks     |
+| POST   | `/api/tasks`      | ➕ Create a task      |
+| GET    | `/api/tasks/:id`  | 🔍 Get a single task  |
+| PATCH  | `/api/tasks/:id`  | ✏️ Update a task      |
+| DELETE | `/api/tasks/:id`  | 🗑️ Delete a task      |
 
 ## ⚙️ CI / GitHub Actions
 
