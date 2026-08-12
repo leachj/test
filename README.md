@@ -1,6 +1,6 @@
 # 📋 Task Manager
 
-A full-stack application with a React (TypeScript) frontend and a Rust (Axum) backend.
+✨ A full-stack application with a ⚛️ React (TypeScript) frontend and a 🦀 Rust (Axum) backend.
 
 ## 🗂️ Project Structure
 
@@ -76,18 +76,18 @@ npm test           # Run Vitest tests
 npm run lint       # ESLint
 ```
 
-> The frontend dev server proxies `/api` requests to the backend at `http://localhost:3001`.
+> 💡 The frontend dev server proxies `/api` requests to the backend at `http://localhost:3001`.
 
 ## 🔌 API Endpoints
 
 | Method | Path              | Description        |
 |--------|-------------------|--------------------|
-| GET    | `/health`         | Health check       |
-| GET    | `/api/tasks`      | List all tasks     |
-| POST   | `/api/tasks`      | Create a task      |
-| GET    | `/api/tasks/:id`  | Get a single task  |
-| PATCH  | `/api/tasks/:id`  | Update a task      |
-| DELETE | `/api/tasks/:id`  | Delete a task      |
+| GET    | `/health`         | 💓 Health check       |
+| GET    | `/api/tasks`      | 📋 List all tasks     |
+| POST   | `/api/tasks`      | ➕ Create a task      |
+| GET    | `/api/tasks/:id`  | 🔍 Get a single task  |
+| PATCH  | `/api/tasks/:id`  | ✏️ Update a task      |
+| DELETE | `/api/tasks/:id`  | 🗑️ Delete a task      |
 
 ## ⚙️ CI / GitHub Actions
 
