@@ -14,6 +14,41 @@ A full-stack application with a React (TypeScript) frontend and a Rust (Axum) ba
         └── frontend.yml  # CI: lint, build & test the frontend
 ```
 
+## 🏗️ Architecture
+
+```mermaid
+graph LR
+    User(("👤 User"))
+    subgraph Frontend["⚛️ Frontend (React + TS + Vite)"]
+        UI["UI Components"]
+    end
+    subgraph Backend["🦀 Backend (Rust + Axum)"]
+        API["REST API"]
+        Store["Task Store"]
+    end
+
+    User --> UI
+    UI -- "/api/tasks (fetch, proxied)" --> API
+    API --> Store
+    Store --> API
+    API --> UI
+```
+
+## 🔄 Request Flow
+
+```mermaid
+sequenceDiagram
+    actor U as User
+    participant F as Frontend (React)
+    participant B as Backend (Axum)
+
+    U->>F: Interacts with UI
+    F->>B: HTTP request (e.g. POST /api/tasks)
+    B->>B: Validate & process
+    B-->>F: JSON response
+    F-->>U: Updated UI
+```
+
 ## 🚀 Getting Started
 
 ### 🦀 Backend
