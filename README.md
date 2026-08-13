@@ -34,6 +34,28 @@ graph LR
     API --> UI
 ```
 
+## 🧱 Block Diagram
+
+```mermaid
+block-beta
+columns 3
+
+  Browser["🌐 Browser"]:3
+
+  space:3
+
+  UI["React UI"]:3
+
+  space:3
+
+  Router["Axum Router"] Handlers["Task Handlers"] Store["In-Memory / DB Store"]
+
+  Browser --> UI
+  UI --> Router
+  Router --> Handlers
+  Handlers --> Store
+```
+
 ## 🔄 Request Flow
 
 ```mermaid
