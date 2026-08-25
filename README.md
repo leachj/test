@@ -1,30 +1,31 @@
 # 📋 Task Manager
 
-A full-stack application with a React (TypeScript) frontend and a Rust (Axum) backend.
+A full-stack application with a React (TypeScript) frontend and a Python (FastAPI) backend.
 
 ## 🗂️ Project Structure
 
 ```
 .
-├── backend/    # Rust + Axum REST API
+├── backend/    # Python + FastAPI REST API
 ├── frontend/   # React + TypeScript + Vite UI
 └── .github/
     └── workflows/
-        ├── backend.yml   # CI: fmt, clippy, build & test the backend
+        ├── backend.yml   # CI: lint & test the backend
         └── frontend.yml  # CI: lint, build & test the frontend
 ```
 
 ## 🚀 Getting Started
 
-### 🦀 Backend
+### 🐍 Backend
 
 ```bash
 cd backend
-cargo run           # Start dev server on http://localhost:3001
-cargo build --release  # Production build
-cargo test          # Run tests
-cargo clippy        # Lint
-cargo fmt           # Format
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt -r requirements-dev.txt
+uvicorn app.main:app --reload --port 3001  # Start dev server on http://localhost:3001
+pytest                                      # Run tests
+ruff check .                                # Lint
 ```
 
 ### ⚛️ Frontend
@@ -55,5 +56,5 @@ npm run lint       # ESLint
 
 Two workflows run on pushes and pull requests to `main`:
 
-- ✅ **Backend CI** (`.github/workflows/backend.yml`) — fmt → clippy → build → test
+- ✅ **Backend CI** (`.github/workflows/backend.yml`) — lint → test
 - ✅ **Frontend CI** (`.github/workflows/frontend.yml`) — lint → build → test
