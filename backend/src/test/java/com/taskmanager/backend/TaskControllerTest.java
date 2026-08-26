@@ -140,6 +140,160 @@ class TaskControllerTest {
         mockMvc.perform(delete("/api/tasks/nonexistent")).andExpect(status().isNotFound());
     }
 
+    @Test
+    void postTasksTrimsLeadingAndTrailingWhitespaceFromTitle() throws Exception {
+        mockMvc.perform(post("/api/tasks")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"  Padded title  \"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.title").value("Padded title"));
+    }
+
+    @Test
+    void postTasksTrimsLeadingAndTrailingWhitespaceFromDescription() throws Exception {
+        mockMvc.perform(post("/api/tasks")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"Task\",\"description\":\"  padded  \"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.description").value("padded"));
+    }
+
+    @Test
+    void postTasksDefaultsDescriptionToEmptyStringWhenOmitted() throws Exception {
+        mockMvc.perform(post("/api/tasks")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"No description\"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.description").value(""));
+    }
+
+    @Test
+    void postTasksReturns400WhenTitleIsAbsentFromAnEmptyBody() throws Exception {
+        mockMvc.perform(post("/api/tasks")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error.message").value("Title is required"))
+                .andExpect(jsonPath("$.error.statusCode").value(400));
+    }
+
+    @Test
+    void postTasksAssignsDistinctIdsToEachTask() throws Exception {
+        String firstId = createTask("Task 1", null);
+        String secondId = createTask("Task 2", null);
+
+        org.assertj.core.api.Assertions.assertThat(firstId).isNotEqualTo(secondId);
+    }
+
+    @Test
+    void getTaskByIdReturns404WithErrorBodyForUnknownId() throws Exception {
+        mockMvc.perform(get("/api/tasks/nonexistent"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.error.message").value("Task not found"))
+                .andExpect(jsonPath("$.error.statusCode").value(404));
+    }
+
+    @Test
+    void patchTaskUpdatesOnlyTitleWhenOnlyTitleProvided() throws Exception {
+        String id = createTask("Original title", "Original description");
+
+        mockMvc.perform(patch("/api/tasks/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"New title\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("New title"))
+                .andExpect(jsonPath("$.description").value("Original description"))
+                .andExpect(jsonPath("$.completed").value(false));
+    }
+
+    @Test
+    void patchTaskUpdatesOnlyDescriptionWhenOnlyDescriptionProvided() throws Exception {
+        String id = createTask("Title", "Original description");
+
+        mockMvc.perform(patch("/api/tasks/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"description\":\"New description\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Title"))
+                .andExpect(jsonPath("$.description").value("New description"));
+    }
+
+    @Test
+    void patchTaskUpdatesOnlyCompletedWhenOnlyCompletedProvided() throws Exception {
+        String id = createTask("Title", null);
+
+        mockMvc.perform(patch("/api/tasks/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"completed\":true}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Title"))
+                .andExpect(jsonPath("$.completed").value(true));
+    }
+
+    @Test
+    void patchTaskCanToggleCompletedBackToFalse() throws Exception {
+        String id = createTask("Title", null);
+        mockMvc.perform(patch("/api/tasks/{id}", id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"completed\":true}"));
+
+        mockMvc.perform(patch("/api/tasks/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"completed\":false}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.completed").value(false));
+    }
+
+    @Test
+    void patchTaskWithEmptyBodyLeavesFieldsUnchanged() throws Exception {
+        String id = createTask("Title", "Description");
+
+        mockMvc.perform(patch("/api/tasks/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Title"))
+                .andExpect(jsonPath("$.description").value("Description"))
+                .andExpect(jsonPath("$.completed").value(false));
+    }
+
+    @Test
+    void patchTaskReturns404WithErrorBodyForUnknownId() throws Exception {
+        mockMvc.perform(patch("/api/tasks/nonexistent")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"x\"}"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.error.message").value("Task not found"))
+                .andExpect(jsonPath("$.error.statusCode").value(404));
+    }
+
+    @Test
+    void deleteTaskDoesNotAffectOtherTasks() throws Exception {
+        String keepId = createTask("Keep me", null);
+        String deleteId = createTask("Delete me", null);
+
+        mockMvc.perform(delete("/api/tasks/{id}", deleteId)).andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/api/tasks")).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(1)));
+        mockMvc.perform(get("/api/tasks/{id}", keepId)).andExpect(status().isOk());
+    }
+
+    @Test
+    void deleteTaskReturns404WithErrorBodyForUnknownId() throws Exception {
+        mockMvc.perform(delete("/api/tasks/nonexistent"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.error.message").value("Task not found"))
+                .andExpect(jsonPath("$.error.statusCode").value(404));
+    }
+
+    @Test
+    void deletingTheSameTaskTwiceReturns404OnSecondAttempt() throws Exception {
+        String id = createTask("Delete me twice", null);
+
+        mockMvc.perform(delete("/api/tasks/{id}", id)).andExpect(status().isNoContent());
+        mockMvc.perform(delete("/api/tasks/{id}", id)).andExpect(status().isNotFound());
+    }
+
     private String createTask(String title, String description) throws Exception {
         String body = objectMapper.writeValueAsString(new java.util.HashMap<String, String>() {
             {
