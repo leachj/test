@@ -1,4 +1,4 @@
-# 📋 Task Manager
+# 📋 ✨ Task Manager ✨
 
 A full-stack application with a React (TypeScript) frontend and a Rust (Axum) backend. ⚡✨
 
@@ -14,7 +14,7 @@ A full-stack application with a React (TypeScript) frontend and a Rust (Axum) ba
         └── frontend.yml  # CI: lint, build & test the frontend
 ```
 
-## 🚀 Getting Started
+## 🚀 ✨ Getting Started
 
 ### 🦀 Backend
 
@@ -40,7 +40,7 @@ npm run lint       # ESLint
 
 > 💡 The frontend dev server proxies `/api` requests to the backend at `http://localhost:3001`.
 
-## 🔌 API Endpoints
+## 🔌 ✨ API Endpoints
 
 | Method    | Path              | Description        |
 |-----------|-------------------|--------------------|
@@ -55,5 +55,5 @@ npm run lint       # ESLint
 
 Two workflows 🤖 run on pushes and pull requests to `main`:
 
-- ✅ **Backend CI** (`.github/workflows/backend.yml`) — fmt → clippy → build → test
-- ✅ **Frontend CI** (`.github/workflows/frontend.yml`) — lint → build → test
+- ✅ ✨ **Backend CI** (`.github/workflows/backend.yml`) — fmt → clippy → build → test
+- ✅ ✨ **Frontend CI** (`.github/workflows/frontend.yml`) — lint → build → test
