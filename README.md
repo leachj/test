@@ -1,6 +1,6 @@
 # 📋 Task Manager
 
-A full-stack application with a React (TypeScript) frontend and a Rust (Axum) backend.
+A full-stack application with an ⚛️ React (TypeScript) frontend and a 🦀 Rust (Axum) backend.
 
 ## 🗂️ Project Structure
 
