@@ -2,6 +2,12 @@
 
 A full-stack application with a React (TypeScript) frontend and a Rust (Axum) backend.
 
+## 😄 Developer Humor
+
+- Why did the developer go broke? They used up all their cache.
+- Why do programmers prefer dark mode? Because light attracts bugs.
+- How many programmers does it take to change a light bulb? None — that's a hardware problem.
+
 ## 🗂️ Project Structure
 
 ```
