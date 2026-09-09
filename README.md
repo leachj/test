@@ -40,6 +40,13 @@ npm run lint       # ESLint
 
 > The frontend dev server proxies `/api` requests to the backend at `http://localhost:3001`.
 
+## 😄 Task Manager Humor
+
+- Why did the task stay in the backlog? It had commitment issues.
+- The Rust backend borrowed a task. Don't worry—it gave it back before the lifetime ended.
+- Why did the React component finish every task? It finally got its priorities straight.
+- I marked "stop procrastinating" as complete. The implementation is scheduled for next sprint.
+
 ## 🔌 API Endpoints
 
 | Method | Path              | Description        |
