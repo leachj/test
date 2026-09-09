@@ -40,6 +40,25 @@ npm run lint       # ESLint
 
 > The frontend dev server proxies `/api` requests to the backend at `http://localhost:3001`.
 
+## 😄 Task Manager Humor
+
+- Why did the task stay in the backlog? It had commitment issues.
+- The Rust backend borrowed a task. Don't worry—it gave it back before the lifetime ended.
+- Why did the React component finish every task? It finally got its priorities straight.
+- I marked "stop procrastinating" as complete. The implementation is scheduled for next sprint.
+
+**C++ bonus round:**
+
+- I asked C++ for a simple answer. It gave me three constructors, two templates, and undefined behavior.
+- C++ doesn't have garbage collection. It has a proud tradition of taking the trash out manually and forgetting whose turn it is.
+- The C++ task said it was finished, but its destructor still had some cleanup to do.
+
+**Python bonus round:**
+
+- Why did the Python task finish early? It had fewer braces holding it back.
+- I asked Python to handle an exception. It raised one instead.
+- The Python developer brought a ladder to work because the code had too many high-level abstractions.
+
 ## 🔌 API Endpoints
 
 | Method | Path              | Description        |
