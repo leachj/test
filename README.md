@@ -181,3 +181,47 @@ Why did the API start meditating?
 It had too many requests to process.
 
 </details>
+
+### 6. Borrowed Time 🦀
+
+Why would the Rustacean not lend the same variable to two friends?
+
+<details>
+<summary>Show punchline</summary>
+
+The first borrow was still in scope.
+
+</details>
+
+### 7. A Clean Conscience 🦀
+
+Why did the Rustacean turn down the garbage collector?
+
+<details>
+<summary>Show punchline</summary>
+
+It preferred to take ownership of its own mess.
+
+</details>
+
+### 8. Rest Without Races 🦀
+
+Why do Rustaceans sleep so soundly?
+
+<details>
+<summary>Show punchline</summary>
+
+They know there are no data races under the bed.
+
+</details>
+
+### 9. Serious Commitment 🦀
+
+Why did the Rustacean bring a lifetime annotation on a first date?
+
+<details>
+<summary>Show punchline</summary>
+
+To make the relationship expectations explicit.
+
+</details>
