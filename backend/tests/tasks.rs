@@ -87,7 +87,7 @@ async fn post_tasks_creates_a_task_with_title() {
         .oneshot(json_request(
             "POST",
             "/api/tasks",
-            json!({ "title": "My Task", "description": "Some description" }),
+            json!({ "title": "My Task", "description": "Some description", "assignee": "Alex" }),
         ))
         .await
         .unwrap();
@@ -97,8 +97,26 @@ async fn post_tasks_creates_a_task_with_title() {
     assert_eq!(body["title"], "My Task");
     assert_eq!(body["description"], "Some description");
     assert_eq!(body["completed"], false);
+    assert_eq!(body["assignee"], "Alex");
     assert!(body["id"].is_string());
     assert!(body["createdAt"].is_string());
+}
+
+#[tokio::test]
+async fn post_tasks_creates_a_task_without_assignee() {
+    let app = app_with_fresh_state();
+    let res = app
+        .oneshot(json_request(
+            "POST",
+            "/api/tasks",
+            json!({ "title": "No assignee" }),
+        ))
+        .await
+        .unwrap();
+
+    assert_eq!(res.status(), StatusCode::CREATED);
+    let body = body_json(res).await;
+    assert!(body["assignee"].is_null());
 }
 
 #[tokio::test]
@@ -182,7 +200,7 @@ async fn patch_task_updates_fields() {
         .oneshot(json_request(
             "PATCH",
             &format!("/api/tasks/{id}"),
-            json!({ "title": "Updated", "completed": true }),
+            json!({ "title": "Updated", "completed": true, "assignee": "Jordan" }),
         ))
         .await
         .unwrap();
@@ -190,6 +208,7 @@ async fn patch_task_updates_fields() {
     let body = body_json(res).await;
     assert_eq!(body["title"], "Updated");
     assert_eq!(body["completed"], true);
+    assert_eq!(body["assignee"], "Jordan");
 }
 
 #[tokio::test]

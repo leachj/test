@@ -13,6 +13,7 @@ describe('TaskForm', () => {
     render(<TaskForm onSubmit={mockSubmit} />);
     expect(screen.getByLabelText(/title/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/description/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/assignee/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /add task/i })).toBeInTheDocument();
   });
 
@@ -23,20 +24,22 @@ describe('TaskForm', () => {
     expect(mockSubmit).not.toHaveBeenCalled();
   });
 
-  it('calls onSubmit with title and clears form', async () => {
+  it('calls onSubmit with title, description, and assignee then clears form', async () => {
     mockSubmit.mockResolvedValue(undefined);
     render(<TaskForm onSubmit={mockSubmit} />);
 
     fireEvent.change(screen.getByLabelText(/title/i), { target: { value: 'Buy milk' } });
     fireEvent.change(screen.getByLabelText(/description/i), { target: { value: 'Whole milk' } });
+    fireEvent.change(screen.getByLabelText(/assignee/i), { target: { value: 'Alex' } });
     fireEvent.click(screen.getByRole('button', { name: /add task/i }));
 
     await waitFor(() => {
-      expect(mockSubmit).toHaveBeenCalledWith({ title: 'Buy milk', description: 'Whole milk' });
+      expect(mockSubmit).toHaveBeenCalledWith({ title: 'Buy milk', description: 'Whole milk', assignee: 'Alex' });
     });
 
     expect(screen.getByLabelText(/title/i)).toHaveValue('');
     expect(screen.getByLabelText(/description/i)).toHaveValue('');
+    expect(screen.getByLabelText(/assignee/i)).toHaveValue('');
   });
 
   it('shows error message when onSubmit throws', async () => {
