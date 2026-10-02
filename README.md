@@ -57,3 +57,9 @@ Two workflows run on pushes and pull requests to `main`:
 
 - ✅ **Backend CI** (`.github/workflows/backend.yml`) — fmt → clippy → build → test
 - ✅ **Frontend CI** (`.github/workflows/frontend.yml`) — lint → build → test
+
+## 😄 Developer Joke
+
+> Why do programmers prefer dark mode?
+>
+> Because light attracts bugs! 🐛
