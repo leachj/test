@@ -1,30 +1,28 @@
 # 📋 Task Manager
 
-A full-stack application with a React (TypeScript) frontend and a Rust (Axum) backend.
+A full-stack application with a React (TypeScript) frontend and a Java (Spring Boot) backend.
 
 ## 🗂️ Project Structure
 
 ```
 .
-├── backend/    # Rust + Axum REST API
+├── backend/    # Java + Spring Boot REST API
 ├── frontend/   # React + TypeScript + Vite UI
 └── .github/
     └── workflows/
-        ├── backend.yml   # CI: fmt, clippy, build & test the backend
+        ├── backend.yml   # CI: build & test the backend
         └── frontend.yml  # CI: lint, build & test the frontend
 ```
 
 ## 🚀 Getting Started
 
-### 🦀 Backend
+### ☕ Backend
 
 ```bash
 cd backend
-cargo run           # Start dev server on http://localhost:3001
-cargo build --release  # Production build
-cargo test          # Run tests
-cargo clippy        # Lint
-cargo fmt           # Format
+mvn spring-boot:run   # Start dev server on http://localhost:3001
+mvn package           # Production build → target/backend.jar
+mvn test              # Run tests
 ```
 
 ### ⚛️ Frontend
@@ -55,5 +53,5 @@ npm run lint       # ESLint
 
 Two workflows run on pushes and pull requests to `main`:
 
-- ✅ **Backend CI** (`.github/workflows/backend.yml`) — fmt → clippy → build → test
+- ✅ **Backend CI** (`.github/workflows/backend.yml`) — build → test
 - ✅ **Frontend CI** (`.github/workflows/frontend.yml`) — lint → build → test

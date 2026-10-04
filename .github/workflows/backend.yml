@@ -25,24 +25,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Rust
-        uses: dtolnay/rust-toolchain@stable
+      - name: Set up JDK
+        uses: actions/setup-java@v4
         with:
-          components: clippy, rustfmt
-
-      - name: Cache cargo registry & build
-        uses: Swatinem/rust-cache@v2
-        with:
-          workspaces: backend
-
-      - name: Format check
-        run: cargo fmt -- --check
-
-      - name: Lint
-        run: cargo clippy --all-targets -- -D warnings
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+          cache-dependency-path: backend/pom.xml
 
       - name: Build
-        run: cargo build --verbose
+        run: mvn -B -DskipTests package --no-transfer-progress
 
       - name: Test
-        run: cargo test --verbose
+        run: mvn -B test --no-transfer-progress
