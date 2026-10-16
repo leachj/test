@@ -8,6 +8,7 @@ const sampleTask: Task = {
   title: 'Test task',
   description: 'A description',
   completed: false,
+  assignee: 'Sam',
   createdAt: new Date().toISOString(),
 };
 
@@ -16,6 +17,16 @@ describe('TaskItem', () => {
     render(<TaskItem task={sampleTask} onToggle={vi.fn()} onDelete={vi.fn()} />);
     expect(screen.getByText('Test task')).toBeInTheDocument();
     expect(screen.getByText('A description')).toBeInTheDocument();
+  });
+
+  it('renders assignee when present', () => {
+    render(<TaskItem task={sampleTask} onToggle={vi.fn()} onDelete={vi.fn()} />);
+    expect(screen.getByText(/assigned to: sam/i)).toBeInTheDocument();
+  });
+
+  it('does not render assignee text when absent', () => {
+    render(<TaskItem task={{ ...sampleTask, assignee: undefined }} onToggle={vi.fn()} onDelete={vi.fn()} />);
+    expect(screen.queryByText(/assigned to/i)).not.toBeInTheDocument();
   });
 
   it('renders checkbox unchecked for incomplete task', () => {
