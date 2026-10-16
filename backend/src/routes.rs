@@ -45,6 +45,8 @@ async fn create_task(
         return Err(AppError::bad_request("Title is required"));
     }
 
+    let due_date = validate_due_date(body.due_date)?;
+
     let task = Task {
         id: Uuid::new_v4().to_string(),
         title: trimmed_title.to_string(),
@@ -54,6 +56,7 @@ async fn create_task(
             .unwrap_or_default(),
         completed: false,
         created_at: Utc::now().to_rfc3339(),
+        due_date,
     };
 
     state
@@ -76,6 +79,11 @@ async fn update_task(
         None => return Err(AppError::not_found("Task not found")),
     };
 
+    let due_date = match body.due_date {
+        Some(new_due_date) => validate_due_date(new_due_date)?,
+        None => existing.due_date,
+    };
+
     let updated = Task {
         id: existing.id,
         title: body
@@ -88,10 +96,26 @@ async fn update_task(
             .unwrap_or(existing.description),
         completed: body.completed.unwrap_or(existing.completed),
         created_at: existing.created_at,
+        due_date,
     };
 
     tasks.insert(updated.id.clone(), updated.clone());
     Ok(Json(updated))
+}
+
+/// Validates an optional due date string, requiring RFC3339 format when present.
+/// Empty strings are treated as "no due date".
+fn validate_due_date(due_date: Option<String>) -> Result<Option<String>, AppError> {
+    match due_date {
+        None => Ok(None),
+        Some(s) if s.trim().is_empty() => Ok(None),
+        Some(s) => match chrono::DateTime::parse_from_rfc3339(s.trim()) {
+            Ok(parsed) => Ok(Some(parsed.to_rfc3339())),
+            Err(_) => Err(AppError::bad_request(
+                "dueDate must be a valid RFC3339 date-time string",
+            )),
+        },
+    }
 }
 
 async fn delete_task(
