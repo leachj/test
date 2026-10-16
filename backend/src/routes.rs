@@ -8,7 +8,7 @@ use uuid::Uuid;
 
 use crate::{
     error::AppError,
-    models::{CreateTaskDto, Task, UpdateTaskDto},
+    models::{CreateTaskDto, Priority, Task, UpdateTaskDto},
     state::AppState,
 };
 
@@ -45,6 +45,11 @@ async fn create_task(
         return Err(AppError::bad_request("Title is required"));
     }
 
+    let priority = match body.priority {
+        Some(p) => Priority::parse(&p).map_err(AppError::bad_request)?,
+        None => Priority::default(),
+    };
+
     let task = Task {
         id: Uuid::new_v4().to_string(),
         title: trimmed_title.to_string(),
@@ -53,6 +58,7 @@ async fn create_task(
             .map(|d| d.trim().to_string())
             .unwrap_or_default(),
         completed: false,
+        priority,
         created_at: Utc::now().to_rfc3339(),
     };
 
@@ -76,6 +82,11 @@ async fn update_task(
         None => return Err(AppError::not_found("Task not found")),
     };
 
+    let priority = match body.priority {
+        Some(p) => Priority::parse(&p).map_err(AppError::bad_request)?,
+        None => existing.priority,
+    };
+
     let updated = Task {
         id: existing.id,
         title: body
@@ -87,6 +98,7 @@ async fn update_task(
             .map(|d| d.trim().to_string())
             .unwrap_or(existing.description),
         completed: body.completed.unwrap_or(existing.completed),
+        priority,
         created_at: existing.created_at,
     };
 

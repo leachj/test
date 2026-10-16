@@ -8,6 +8,7 @@ const sampleTask: Task = {
   title: 'Test task',
   description: 'A description',
   completed: false,
+  priority: 'medium',
   createdAt: new Date().toISOString(),
 };
 
