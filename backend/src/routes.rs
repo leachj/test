@@ -54,6 +54,10 @@ async fn create_task(
             .unwrap_or_default(),
         completed: false,
         created_at: Utc::now().to_rfc3339(),
+        due_date: body
+            .due_date
+            .map(|d| d.trim().to_string())
+            .filter(|d| !d.is_empty()),
     };
 
     state
@@ -88,6 +92,10 @@ async fn update_task(
             .unwrap_or(existing.description),
         completed: body.completed.unwrap_or(existing.completed),
         created_at: existing.created_at,
+        due_date: match body.due_date {
+            Some(d) => d.map(|d| d.trim().to_string()).filter(|d| !d.is_empty()),
+            None => existing.due_date,
+        },
     };
 
     tasks.insert(updated.id.clone(), updated.clone());

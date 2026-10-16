@@ -4,11 +4,13 @@ export interface Task {
   description: string;
   completed: boolean;
   createdAt: string;
+  dueDate?: string;
 }
 
 export interface CreateTaskDto {
   title: string;
   description?: string;
+  dueDate?: string;
 }
 
 const BASE_URL = '/api/tasks';
