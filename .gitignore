@@ -1,12 +1,15 @@
 # Dependencies
 node_modules/
+backend/.venv/
+**/__pycache__/
+*.pyc
 
 # Build output
-backend/target/
 frontend/dist/
 
 # Coverage
 frontend/coverage/
+backend/.pytest_cache/
 
 # Environment files
 .env
